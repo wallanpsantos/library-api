@@ -55,9 +55,9 @@ class BookControllerTest {
         mockMvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("id").value(10))
-                .andExpect(MockMvcResultMatchers.jsonPath("title").value("Meu Livro"))
-                .andExpect(MockMvcResultMatchers.jsonPath("author").value("Autor"))
-                .andExpect(MockMvcResultMatchers.jsonPath("isbn").value("1213212"));
+                .andExpect(MockMvcResultMatchers.jsonPath("title").value(BookDTOMock.getMock().getTitle()))
+                .andExpect(MockMvcResultMatchers.jsonPath("author").value(BookDTOMock.getMock().getAuthor()))
+                .andExpect(MockMvcResultMatchers.jsonPath("isbn").value(BookDTOMock.getMock().getIsbn()));
 
     }
 
