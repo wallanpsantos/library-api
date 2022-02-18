@@ -12,4 +12,22 @@ public class BookModelMock {
                 .isbn("1213212")
                 .build();
     }
+
+    public static BookModel getSaveBookMockWithId() {
+        return BookModel.builder()
+                .id(1L)
+                .author("Yoshi")
+                .title("Yoshi Adventure")
+                .isbn("360")
+                .build();
+    }
+
+    public static BookModel getSaveBookMockNotId() {
+        return BookModel.builder()
+                .author("Yoshi")
+                .title("Yoshi Adventure")
+                .isbn("360")
+                .build();
+    }
+
 }

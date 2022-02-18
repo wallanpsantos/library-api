@@ -25,8 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@WebMvcTest
-@AutoConfigureMockMvc
+@WebMvcTest // Para REST
+@AutoConfigureMockMvc // Para REST
 // TESTE UNITARIO
 class BookControllerTest {
 
