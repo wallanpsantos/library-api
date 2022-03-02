@@ -23,10 +23,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -58,11 +61,11 @@ class BookControllerTest {
                 .content(json);
 
         mockMvc.perform(request)
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("id").value(10))
-                .andExpect(MockMvcResultMatchers.jsonPath("title").value(BookDTOMock.getMock().getTitle()))
-                .andExpect(MockMvcResultMatchers.jsonPath("author").value(BookDTOMock.getMock().getAuthor()))
-                .andExpect(MockMvcResultMatchers.jsonPath("isbn").value(BookDTOMock.getMock().getIsbn()));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("id").value(10))
+                .andExpect(jsonPath("title").value(BookDTOMock.getMock().getTitle()))
+                .andExpect(jsonPath("author").value(BookDTOMock.getMock().getAuthor()))
+                .andExpect(jsonPath("isbn").value(BookDTOMock.getMock().getIsbn()));
 
     }
 
@@ -79,8 +82,8 @@ class BookControllerTest {
                 .content(json);
 
         mockMvc.perform(request)
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("errors", hasSize(1)));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", hasSize(1)));
     }
 
     @Test
@@ -100,10 +103,46 @@ class BookControllerTest {
                 .content(json);
 
         mockMvc.perform(request)
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("errors[0]").value(messageError));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect(jsonPath("errors[0]").value(messageError));
 
+    }
+
+    @Test
+    @DisplayName("Deve retorna detalhes do livro")
+    void getBookDetails() throws Exception {
+        // Cenario
+        var id = 1L;
+        BDDMockito.given(bookServices.getById(id)).willReturn(Optional.of(BookModelMock.getSaveBookMockWithId()));
+
+        // Execucao (When)
+        var request = MockMvcRequestBuilders
+                .get(BOOK_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON);
+
+        // Verificação
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(BookModelMock.getSaveBookMockWithId().getId()))
+                .andExpect(jsonPath("title").value(BookModelMock.getSaveBookMockWithId().getTitle()))
+                .andExpect(jsonPath("author").value(BookModelMock.getSaveBookMockWithId().getAuthor()))
+                .andExpect(jsonPath("isbn").value(BookModelMock.getSaveBookMockWithId().getIsbn()));
+    }
+
+    @Test
+    @DisplayName("Deve retornar resource not found quando o livro procurado não existir")
+    void bookNotFound() throws Exception {
+        //Cenario
+        BDDMockito.given(bookServices.getById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        //Execução
+        var request = MockMvcRequestBuilders
+                .get(BOOK_API.concat("/" + Mockito.anyLong()))
+                .accept(MediaType.APPLICATION_JSON);
+
+        //Verificação
+        mockMvc.perform(request).andExpect(status().isNotFound());
     }
 
 }

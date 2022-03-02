@@ -7,6 +7,8 @@ import com.libraryapi.service.BookServices;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class BookServiceImpl implements BookServices {
@@ -19,5 +21,10 @@ public class BookServiceImpl implements BookServices {
             throw new BusinessException("ISBN já cadastrado");
         }
         return repository.save(bookModel);
+    }
+
+    @Override
+    public Optional<BookModel> getById(Long id) {
+        return Optional.empty();
     }
 }
