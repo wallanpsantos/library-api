@@ -13,7 +13,7 @@ public class BookModelMock {
                 .build();
     }
 
-    public static BookModel getSaveBookMockWithId() {
+    public static BookModel getBookMockWithId() {
         return BookModel.builder()
                 .id(1L)
                 .author("Yoshi")
@@ -22,7 +22,7 @@ public class BookModelMock {
                 .build();
     }
 
-    public static BookModel getSaveBookMockNotId() {
+    public static BookModel getBookMockNotId() {
         return BookModel.builder()
                 .author("Yoshi")
                 .title("Yoshi Adventure")

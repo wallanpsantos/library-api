@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface BookServices {
     BookModel save(BookModel any);
-        Optional<BookModel> getById(Long id);
 
+    Optional<BookModel> getById(Long id);
+
+    void delete(BookModel book);
 }

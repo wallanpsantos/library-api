@@ -34,8 +34,8 @@ class BookServiceTest {
     @DisplayName("Deve salvar um livro")
     void saveBookTest() {
         // Cenario
-        var book = BookModelMock.getSaveBookMockNotId();
-        Mockito.when(bookRepository.save(book)).thenReturn(BookModelMock.getSaveBookMockWithId());
+        var book = BookModelMock.getBookMockNotId();
+        Mockito.when(bookRepository.save(book)).thenReturn(BookModelMock.getBookMockWithId());
         Mockito.when(bookRepository.existsByIsbn(Mockito.anyString())).thenReturn(Boolean.FALSE);
 
         // Execução
@@ -52,7 +52,7 @@ class BookServiceTest {
     @DisplayName("Deve lançar erro de negocio ao tentar salvar um livro com ISBN duplicado")
     void shouldNotSaveABookWithDuplicatedISBN() {
         // Cenario
-        var book = BookModelMock.getSaveBookMockNotId();
+        var book = BookModelMock.getBookMockNotId();
         Mockito.when(bookRepository.existsByIsbn(Mockito.anyString())).thenReturn(Boolean.TRUE);
 
         // Execução

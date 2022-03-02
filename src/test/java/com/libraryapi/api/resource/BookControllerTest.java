@@ -114,7 +114,7 @@ class BookControllerTest {
     void getBookDetails() throws Exception {
         // Cenario
         var id = 1L;
-        BDDMockito.given(bookServices.getById(id)).willReturn(Optional.of(BookModelMock.getSaveBookMockWithId()));
+        BDDMockito.given(bookServices.getById(id)).willReturn(Optional.of(BookModelMock.getBookMockWithId()));
 
         // Execucao (When)
         var request = MockMvcRequestBuilders
@@ -124,10 +124,10 @@ class BookControllerTest {
         // Verificação
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(BookModelMock.getSaveBookMockWithId().getId()))
-                .andExpect(jsonPath("title").value(BookModelMock.getSaveBookMockWithId().getTitle()))
-                .andExpect(jsonPath("author").value(BookModelMock.getSaveBookMockWithId().getAuthor()))
-                .andExpect(jsonPath("isbn").value(BookModelMock.getSaveBookMockWithId().getIsbn()));
+                .andExpect(jsonPath("id").value(BookModelMock.getBookMockWithId().getId()))
+                .andExpect(jsonPath("title").value(BookModelMock.getBookMockWithId().getTitle()))
+                .andExpect(jsonPath("author").value(BookModelMock.getBookMockWithId().getAuthor()))
+                .andExpect(jsonPath("isbn").value(BookModelMock.getBookMockWithId().getIsbn()));
     }
 
     @Test
@@ -143,6 +143,34 @@ class BookControllerTest {
 
         //Verificação
         mockMvc.perform(request).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve deletar um livro")
+    void deleteBook() throws Exception {
+        // Cenario
+        BDDMockito.given(bookServices.getById(Mockito.anyLong())).willReturn(Optional.of(BookModelMock.getBookMockWithId()));
+
+        // Execução
+        var request = MockMvcRequestBuilders.delete(BOOK_API.concat("/" + Mockito.anyLong()));
+
+        // Verificação
+        mockMvc.perform(request).andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    @DisplayName("Deve retornar resource not found quando náo encontrar o livro para deletar")
+    void deleteInexistentBook() throws Exception {
+        // Cenario
+        BDDMockito.given(bookServices.getById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        // Execução
+        var request = MockMvcRequestBuilders.delete(BOOK_API.concat("/" + Mockito.anyLong()));
+
+        // Verificação
+        mockMvc.perform(request).andExpect(status().isNotFound());
+
     }
 
 }

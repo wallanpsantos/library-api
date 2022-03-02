@@ -29,7 +29,7 @@ class BookRepositoryTest {
     void returnTrueWhenIsbnExists() {
         //  Cenario
         String isbn = "360";
-        testEntityManager.persist(BookModelMock.getSaveBookMockNotId());
+        testEntityManager.persist(BookModelMock.getBookMockNotId());
 
         //  Execução
         boolean exists = bookRepository.existsByIsbn(isbn);
