@@ -173,4 +173,28 @@ class BookControllerTest {
 
     }
 
+    @Test
+    @DisplayName("Deve atualizar um livro passando ID")
+    void updateBook() throws Exception {
+        //Cenario
+        Long id = 10L;
+
+        var json = new ObjectMapper().writeValueAsString(BookModelMock.getBookMockNotId());
+
+        BDDMockito.given(bookServices.getById(id)).willReturn(Optional.of(BookModelMock.getMock()));
+
+        //Execução
+        var request = MockMvcRequestBuilders.put(BOOK_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        //Verificação
+        mockMvc.perform(request).andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(id))
+                .andExpect(jsonPath("title").value(BookModelMock.getBookMockNotId().getTitle()))
+                .andExpect(jsonPath("author").value(BookModelMock.getBookMockNotId().getAuthor()))
+                .andExpect(jsonPath("isbn").value(BookModelMock.getBookMockNotId().getIsbn()));
+    }
+
 }
