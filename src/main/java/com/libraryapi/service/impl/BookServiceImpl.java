@@ -32,4 +32,9 @@ public class BookServiceImpl implements BookServices {
     public void delete(BookModel book) {
 
     }
+
+    @Override
+    public BookModel update(BookModel book) {
+        return null;
+    }
 }

@@ -10,4 +10,6 @@ public interface BookServices {
     Optional<BookModel> getById(Long id);
 
     void delete(BookModel book);
+
+    BookModel update(BookModel book);
 }

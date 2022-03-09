@@ -8,7 +8,16 @@ import com.libraryapi.service.BookServices;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -19,16 +28,16 @@ import javax.validation.Valid;
 public class BookController {
 
     private BookServices bookServices;
-    private ModelMapper modelmapper;
+    private ModelMapper modelMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookDTO create(@RequestBody @Valid BookDTO bookDTO) {
-        var entity = modelmapper.map(bookDTO, BookModel.class);
+        var entity = modelMapper.map(bookDTO, BookModel.class);
 
         entity = bookServices.save(entity);
 
-        return modelmapper.map(entity, BookDTO.class);
+        return modelMapper.map(entity, BookDTO.class);
     }
 
     @GetMapping("/{id}")
@@ -37,7 +46,7 @@ public class BookController {
 
         var book = bookServices.getById(id);
 
-        return book.map(bookModel -> modelmapper.map(bookModel, BookDTO.class))
+        return book.map(bookModel -> modelMapper.map(bookModel, BookDTO.class))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
     }
@@ -49,6 +58,17 @@ public class BookController {
 
         bookServices.delete(book);
     }
+
+    @PutMapping("/{id}")
+    public BookDTO updateBook(@PathVariable Long id, BookDTO bookDTO) {
+        var book = bookServices.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        book.setAuthor(bookDTO.getAuthor());
+        book.setTitle(bookDTO.getTitle());
+        book = bookServices.update(book);
+
+        return modelMapper.map(book, BookDTO.class);
+    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

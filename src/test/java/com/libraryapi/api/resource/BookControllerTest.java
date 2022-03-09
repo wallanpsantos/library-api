@@ -182,12 +182,14 @@ class BookControllerTest {
         var json = new ObjectMapper().writeValueAsString(BookModelMock.getBookMockNotId());
 
         BDDMockito.given(bookServices.getById(id)).willReturn(Optional.of(BookModelMock.getMock()));
+        BDDMockito.given(bookServices.update(BookModelMock.getMock())).willReturn(BookModelMock.getBookMockWithId());
 
         //Execução
         var request = MockMvcRequestBuilders.put(BOOK_API.concat("/" + id))
+                .content(json)
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
+                .contentType(MediaType.APPLICATION_JSON);
+
 
         //Verificação
         mockMvc.perform(request).andExpect(status().isOk())
@@ -195,6 +197,24 @@ class BookControllerTest {
                 .andExpect(jsonPath("title").value(BookModelMock.getBookMockNotId().getTitle()))
                 .andExpect(jsonPath("author").value(BookModelMock.getBookMockNotId().getAuthor()))
                 .andExpect(jsonPath("isbn").value(BookModelMock.getBookMockNotId().getIsbn()));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 ao tentar atualizar um livro inexistente")
+    void updateInexistentBook() throws Exception {
+        //Cenario
+        var json = new ObjectMapper().writeValueAsString(BookModelMock.getBookMockNotId());
+
+        BDDMockito.given(bookServices.getById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        //Execução
+        var request = MockMvcRequestBuilders.put(BOOK_API.concat("/" + Mockito.anyLong()))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        //Verificação
+        mockMvc.perform(request).andExpect(status().isNotFound());
     }
 
 }
