@@ -11,4 +11,12 @@ public class BookDTOMock {
                 .isbn("1213212")
                 .build();
     }
+
+    public static BookDTO mockZeldaUpdateBook() {
+        return BookDTO.builder()
+                .author("Zelda")
+                .title("The Legend of Zelda")
+                .isbn("N-SWITCH")
+                .build();
+    }
 }

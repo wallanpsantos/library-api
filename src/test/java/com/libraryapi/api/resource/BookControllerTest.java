@@ -50,7 +50,7 @@ class BookControllerTest {
     @DisplayName("Deve criar um livro com sucesso.")
     void createBookTest() throws Exception {
 
-        BDDMockito.given(bookServices.save(any(BookModel.class))).willReturn(BookModelMock.getMock());
+        BDDMockito.given(bookServices.save(any(BookModel.class))).willReturn(BookModelMock.getMockBook());
 
         var json = new ObjectMapper().writeValueAsString(BookDTOMock.getMock());
 
@@ -179,10 +179,10 @@ class BookControllerTest {
         //Cenario
         Long id = 10L;
 
-        var json = new ObjectMapper().writeValueAsString(BookModelMock.getBookMockNotId());
+        var json = new ObjectMapper().writeValueAsString(BookDTOMock.mockZeldaUpdateBook());
 
-        BDDMockito.given(bookServices.getById(id)).willReturn(Optional.of(BookModelMock.getMock()));
-        BDDMockito.given(bookServices.update(BookModelMock.getMock())).willReturn(BookModelMock.getBookMockWithId());
+        BDDMockito.given(bookServices.getById(id)).willReturn(Optional.of(BookModelMock.getMockBook()));
+        BDDMockito.given(bookServices.update(any())).willReturn(BookModelMock.mockZeldaUpdateBook());
 
         //Execução
         var request = MockMvcRequestBuilders.put(BOOK_API.concat("/" + id))
@@ -193,10 +193,10 @@ class BookControllerTest {
 
         //Verificação
         mockMvc.perform(request).andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(id))
-                .andExpect(jsonPath("title").value(BookModelMock.getBookMockNotId().getTitle()))
-                .andExpect(jsonPath("author").value(BookModelMock.getBookMockNotId().getAuthor()))
-                .andExpect(jsonPath("isbn").value(BookModelMock.getBookMockNotId().getIsbn()));
+                .andExpect(jsonPath("id").value(BookModelMock.mockZeldaUpdateBook().getId()))
+                .andExpect(jsonPath("title").value(BookModelMock.mockZeldaUpdateBook().getTitle()))
+                .andExpect(jsonPath("author").value(BookModelMock.mockZeldaUpdateBook().getAuthor()))
+                .andExpect(jsonPath("isbn").value(BookModelMock.mockZeldaUpdateBook().getIsbn()));
     }
 
     @Test

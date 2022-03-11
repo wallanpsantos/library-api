@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "TB_BOOK")
+@Table
 public class BookModel {
 
     @Id
