@@ -7,6 +7,7 @@ import com.libraryapi.service.BookServices;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -30,7 +31,9 @@ public class BookServiceImpl implements BookServices {
 
     @Override
     public void delete(BookModel book) {
-
+        if (Objects.isNull(book)) {
+            throw new BusinessException("Erro ao deletar book");
+        }
     }
 
     @Override
