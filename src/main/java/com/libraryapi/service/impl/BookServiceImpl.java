@@ -31,13 +31,17 @@ public class BookServiceImpl implements BookServices {
 
     @Override
     public void delete(BookModel book) {
-        if (Objects.isNull(book)) {
-            throw new BusinessException("Erro ao deletar book");
+        if (Objects.isNull(book) || Objects.isNull(book.getId())) {
+            throw new IllegalArgumentException("Erro ao deletar book");
         }
+        this.repository.delete(book);
     }
 
     @Override
     public BookModel update(BookModel book) {
-        return null;
+        if (Objects.isNull(book) || Objects.isNull(book.getId())) {
+            throw new IllegalArgumentException("Erro ao atualizar book");
+        }
+        return this.repository.save(book);
     }
 }

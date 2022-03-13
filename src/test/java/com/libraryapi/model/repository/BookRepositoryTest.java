@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -51,5 +52,17 @@ class BookRepositoryTest {
         assertThat(exists).isFalse();
     }
 
+    @Test
+    @DisplayName("Deve obter um livro por ID")
+    void findById() {
+        //  Cenario
+        var resultEntity = testEntityManager.persist(BookModelMock.getBookMockNotId());
+
+        //  Execução
+        var exists = bookRepository.findById(resultEntity.getId());
+
+        //  Verificação
+        assertTrue(exists.isPresent());
+    }
 
 }

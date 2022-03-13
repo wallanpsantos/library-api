@@ -4,6 +4,7 @@ import com.libraryapi.exception.BusinessException;
 import com.libraryapi.mocks.api.model.entity.BookModelMock;
 import com.libraryapi.repository.BookRepository;
 import com.libraryapi.service.impl.BookServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,5 +100,31 @@ class BookServiceTest {
 
         //Verificações
         assertTrue(book.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Deve deletar um livro")
+    void deleteBookTest() {
+        // Cenario
+        var book = BookModelMock.getBookMockWithId();
+
+        // Execução
+        Assertions.assertDoesNotThrow(() -> bookServices.delete(book));
+
+        // Verificação
+        Mockito.verify(bookRepository, Mockito.times(1)).delete(book);
+    }
+
+    @Test
+    @DisplayName("Deve ocorre erro ao tentar deletar um livro inexistente.")
+    void deleteInvalidBookTest() {
+        // Cenario
+        var book = BookModelMock.getBookMockNotId();
+
+        // Execução
+        Assertions.assertThrows(IllegalArgumentException.class, () -> bookServices.delete(book));
+
+        // Verificação
+        Mockito.verify(bookRepository, Mockito.never()).delete(book);
     }
 }
