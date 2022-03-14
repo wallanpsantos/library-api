@@ -127,4 +127,20 @@ class BookServiceTest {
         // Verificação
         Mockito.verify(bookRepository, Mockito.never()).delete(book);
     }
+
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    void updateBookTest(){
+        // Cenario
+        Long id = 10L;
+        var updateBook = BookModelMock.getMockBook();
+
+        // Execução
+        Mockito.when(bookRepository.save(updateBook)).thenReturn(BookModelMock.mockZeldaUpdateBook());
+
+        // Verificação
+        
+
+    }
+
 }
