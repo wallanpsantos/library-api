@@ -130,17 +130,20 @@ class BookServiceTest {
 
     @Test
     @DisplayName("Deve atualizar um livro")
-    void updateBookTest(){
+    void updateBookTest() {
         // Cenario
-        Long id = 10L;
-        var updateBook = BookModelMock.getMockBook();
+        var bookToUpdate = BookModelMock.getMockBook();
+
+        Mockito.when(bookRepository.save(bookToUpdate)).thenReturn(BookModelMock.mockZeldaUpdateBook());
 
         // Execução
-        Mockito.when(bookRepository.save(updateBook)).thenReturn(BookModelMock.mockZeldaUpdateBook());
+        var updateBook = bookServices.update(bookToUpdate);
 
         // Verificação
-        
-
+        assertThat(updateBook.getId()).isEqualTo(BookModelMock.mockZeldaUpdateBook().getId());
+        assertThat(updateBook.getTitle()).isEqualTo(BookModelMock.mockZeldaUpdateBook().getTitle());
+        assertThat(updateBook.getAuthor()).isEqualTo(BookModelMock.mockZeldaUpdateBook().getAuthor());
+        assertThat(updateBook.getIsbn()).isEqualTo(BookModelMock.mockZeldaUpdateBook().getIsbn());
     }
 
 }

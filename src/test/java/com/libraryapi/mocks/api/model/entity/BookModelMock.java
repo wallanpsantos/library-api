@@ -16,7 +16,7 @@ public class BookModelMock {
 
     public static BookModel getBookMockWithId() {
         return BookModel.builder()
-                .id(7L)
+                .id(10L)
                 .author("Yoshi")
                 .title("Yoshi Adventure")
                 .isbn("360")
