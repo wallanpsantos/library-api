@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -24,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -215,6 +219,29 @@ class BookControllerTest {
 
         //Verificação
         mockMvc.perform(request).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve filtrar livros")
+    void findBooksTest() throws Exception {
+        // Cenario
+        BDDMockito.given(bookServices.find(Mockito.any(BookModel.class), Mockito.any(Pageable.class)))
+                .willReturn(new PageImpl<BookModel>(List.of(BookModelMock.getBookMockWithId()), PageRequest.of(0, 100), 1));
+
+        var queryString = String.format("?title=%s&author=%s&page=0&size=100",
+                BookModelMock.getBookMockWithId().getTitle(), BookModelMock.getBookMockWithId().getAuthor());
+
+        // Execução
+        var request = MockMvcRequestBuilders.get(BOOK_API.concat(queryString))
+                .accept(MediaType.APPLICATION_JSON);
+
+        // Verificação
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("content", Matchers.hasSize(1)))
+                .andExpect(jsonPath("totalElements").value(1))
+                .andExpect(jsonPath("pageable.pageSize").value(100))
+                .andExpect(jsonPath("pageable.pageNumber").value(0));
     }
 
 }

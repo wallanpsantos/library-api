@@ -5,6 +5,8 @@ import com.libraryapi.exception.BusinessException;
 import com.libraryapi.repository.BookRepository;
 import com.libraryapi.service.BookServices;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -43,5 +45,10 @@ public class BookServiceImpl implements BookServices {
             throw new IllegalArgumentException("Erro ao atualizar book");
         }
         return this.repository.save(book);
+    }
+
+    @Override
+    public Page<BookModel> find(BookModel filter, Pageable pageRequest) {
+        return null;
     }
 }
