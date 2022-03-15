@@ -1,5 +1,6 @@
 package com.libraryapi.model.repository;
 
+import com.libraryapi.api.model.entity.BookModel;
 import com.libraryapi.mocks.api.model.entity.BookModelMock;
 import com.libraryapi.repository.BookRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BookRepositoryTest {
 
     @Autowired
-    TestEntityManager testEntityManager;
+    TestEntityManager entityManager;
 
     @Autowired
     BookRepository bookRepository;
@@ -30,7 +31,7 @@ class BookRepositoryTest {
     void returnTrueWhenIsbnExists() {
         //  Cenario
         String isbn = "360";
-        testEntityManager.persist(BookModelMock.getBookMockNotId());
+        entityManager.persist(BookModelMock.getBookMockNotId());
 
         //  Execução
         boolean exists = bookRepository.existsByIsbn(isbn);
@@ -56,13 +57,39 @@ class BookRepositoryTest {
     @DisplayName("Deve obter um livro por ID")
     void findById() {
         //  Cenario
-        var resultEntity = testEntityManager.persist(BookModelMock.getBookMockNotId());
+        var resultEntity = entityManager.persist(BookModelMock.getBookMockNotId());
 
         //  Execução
         var exists = bookRepository.findById(resultEntity.getId());
 
         //  Verificação
         assertTrue(exists.isPresent());
+    }
+
+    @Test
+    @DisplayName("Deve salvar um livro")
+    void saveBookTest() {
+        // Cenario e Execução
+        var savedBook = bookRepository.save(BookModelMock.getBookMockNotId());
+
+        // Verificação
+        assertThat(savedBook.getId()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Deve deletar um livro")
+    void deleteBookTest() {
+        // Cenario
+        var resultPersist = entityManager.persist(BookModelMock.getBookMockNotId());
+        var foundBook = entityManager.find(BookModel.class, resultPersist.getId());
+
+        // Execução
+        bookRepository.delete(foundBook);
+
+        // Verificação
+        var deletedBook = entityManager.find(BookModel.class, resultPersist.getId());
+
+        assertThat(deletedBook).isNull();
     }
 
 }
