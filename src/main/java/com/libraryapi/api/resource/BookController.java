@@ -7,20 +7,15 @@ import com.libraryapi.exception.BusinessException;
 import com.libraryapi.service.BookServices;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
@@ -69,6 +64,17 @@ public class BookController {
 
             return modelMapper.map(book, BookDTO.class);
         }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping
+    public Page<BookDTO> find(BookDTO bookDTO, Pageable pageRequest) {
+        var filter = modelMapper.map(bookDTO, BookModel.class);
+
+        var result = bookServices.find(filter, pageRequest);
+
+        var list = result.stream().map(bookModel -> modelMapper.map(bookModel, BookDTO.class)).collect(Collectors.toList());
+
+        return new PageImpl<>(list, pageRequest, result.getTotalPages());
     }
 
 
