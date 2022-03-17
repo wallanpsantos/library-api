@@ -5,6 +5,8 @@ import com.libraryapi.exception.BusinessException;
 import com.libraryapi.repository.BookRepository;
 import com.libraryapi.service.BookServices;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,15 @@ public class BookServiceImpl implements BookServices {
 
     @Override
     public Page<BookModel> find(BookModel filter, Pageable pageRequest) {
-        return null;
+        Example<BookModel> example = Example.of(filter,
+                ExampleMatcher
+                        .matching()
+                        .withIgnoreCase()
+                        .withIgnoreNullValues()
+                        /* .withStringMatcher(ExampleMatcher.StringMatcher.) -> Comparar pelo inicio, pelo fim,
+                        exatamente o valor, ou qualquer parte do valor/texto passado */
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+        );
+        return repository.findAll(example, pageRequest);
     }
 }

@@ -9,16 +9,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -40,8 +49,8 @@ class BookServiceTest {
     void saveBookTest() {
         // Cenario
         var book = BookModelMock.getBookMockNotId();
-        Mockito.when(bookRepository.save(book)).thenReturn(BookModelMock.getBookMockWithId());
-        Mockito.when(bookRepository.existsByIsbn(Mockito.anyString())).thenReturn(Boolean.FALSE);
+        when(bookRepository.save(book)).thenReturn(BookModelMock.getBookMockWithId());
+        when(bookRepository.existsByIsbn(anyString())).thenReturn(Boolean.FALSE);
 
         // Execução
         var savedBook = bookServices.save(book);
@@ -58,7 +67,7 @@ class BookServiceTest {
     void shouldNotSaveABookWithDuplicatedISBN() {
         // Cenario
         var book = BookModelMock.getBookMockNotId();
-        Mockito.when(bookRepository.existsByIsbn(Mockito.anyString())).thenReturn(Boolean.TRUE);
+        when(bookRepository.existsByIsbn(anyString())).thenReturn(Boolean.TRUE);
 
         // Execução
         var exception = catchThrowable(() -> bookServices.save(book));
@@ -66,7 +75,7 @@ class BookServiceTest {
         // Verificação
         assertThat(exception).isInstanceOf(BusinessException.class).hasMessage("ISBN já cadastrado");
 
-        Mockito.verify(bookRepository, Mockito.never()).save(book);
+        verify(bookRepository, never()).save(book);
     }
 
     @Test
@@ -74,7 +83,7 @@ class BookServiceTest {
     void getByIdTest() {
         // Cenario
         Long id = 10L;
-        Mockito.when(bookRepository.findById(id)).thenReturn(Optional.of(BookModelMock.getMockBook()));
+        when(bookRepository.findById(id)).thenReturn(Optional.of(BookModelMock.getMockBook()));
 
         //Execução
         var foundBook = bookServices.getById(id);
@@ -94,7 +103,7 @@ class BookServiceTest {
     void bookNotFoundtByIdTest() {
         // Cenario
         Long id = 10L;
-        Mockito.when(bookRepository.findById(id)).thenReturn(Optional.empty());
+        when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
         //Execução
         var book = bookServices.getById(id);
@@ -113,7 +122,7 @@ class BookServiceTest {
         Assertions.assertDoesNotThrow(() -> bookServices.delete(book));
 
         // Verificação
-        Mockito.verify(bookRepository, Mockito.times(1)).delete(book);
+        verify(bookRepository, times(1)).delete(book);
     }
 
     @Test
@@ -126,7 +135,7 @@ class BookServiceTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> bookServices.delete(book));
 
         // Verificação
-        Mockito.verify(bookRepository, Mockito.never()).delete(book);
+        verify(bookRepository, never()).delete(book);
     }
 
     @Test
@@ -135,7 +144,7 @@ class BookServiceTest {
         // Cenario
         var bookToUpdate = BookModelMock.getMockBook();
 
-        Mockito.when(bookRepository.save(bookToUpdate)).thenReturn(BookModelMock.mockZeldaUpdateBook());
+        when(bookRepository.save(bookToUpdate)).thenReturn(BookModelMock.mockZeldaUpdateBook());
 
         // Execução
         var updateBook = bookServices.update(bookToUpdate);
@@ -145,6 +154,26 @@ class BookServiceTest {
         assertThat(updateBook.getTitle()).isEqualTo(BookModelMock.mockZeldaUpdateBook().getTitle());
         assertThat(updateBook.getAuthor()).isEqualTo(BookModelMock.mockZeldaUpdateBook().getAuthor());
         assertThat(updateBook.getIsbn()).isEqualTo(BookModelMock.mockZeldaUpdateBook().getIsbn());
+    }
+
+    @Test
+    @DisplayName("Deve filtrar livros pelas propriedades")
+    void findBooksTest() {
+        // Cenario
+        var pageRequest = PageRequest.of(0, 10);
+        var books = List.of(BookModelMock.getBookMockWithId());
+        var page = new PageImpl<>(books, pageRequest, 1);
+
+        when(bookRepository.findAll(any(Example.class), any(PageRequest.class))).thenReturn(page);
+
+        // Execução
+        var result = bookServices.find(BookModelMock.getBookMockWithId(), pageRequest);
+
+        // Verificação
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent()).isEqualTo(books);
+        assertThat(result.getPageable().getPageNumber()).isZero();
+        assertThat(result.getPageable().getPageSize()).isEqualTo(10);
     }
 
 }
