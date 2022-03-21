@@ -7,6 +7,7 @@ import com.libraryapi.mocks.api.model.entity.BookModelMock;
 import com.libraryapi.mocks.api.model.entity.LoanModelMock;
 import com.libraryapi.service.BookServices;
 import com.libraryapi.service.LoanService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -67,9 +69,27 @@ class LoanControllerTest {
         // Verificação
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
-                //.andExpect(jsonPath("id").value(BookModelMock.mockBookWithIdToLoanBook().getId()));
                 .andExpect(content().string(BookModelMock.mockBookWithIdToLoanBook().getId().toString()));
+    }
 
 
+    @Test
+    @DisplayName("Deve retornar erro ao tentar fazer um emprestimo de livro inexistente.")
+    void invalidIsbnCreateLoanTest() throws Exception {
+        // Cenario
+        var json = new ObjectMapper().writeValueAsString(LoanDTOMock.createMock());
+
+        BDDMockito.given(bookServices.getBookByIsbn(LoanDTOMock.createMock().getIsbn())).willReturn(Optional.empty());
+        // Execução
+        var request = MockMvcRequestBuilders.post(LOAN_API)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        // Verificação
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect(jsonPath("errors[0]").value("Book not found for passed isbn"));
     }
 }

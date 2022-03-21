@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
@@ -26,7 +27,9 @@ public class LoanController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long create(@RequestBody LoanDTO dto) {
-        var book = bookServices.getBookByIsbn(dto.getIsbn()).get();
+        var book = bookServices.getBookByIsbn(dto.getIsbn())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book not found for passed isbn"));
+
         var entity = LoanModel.builder()
                 .customer(dto.getCustomer())
                 .book(book)
