@@ -1,6 +1,5 @@
 package com.libraryapi.mocks.api.model.entity;
 
-import com.libraryapi.api.dto.BookDTO;
 import com.libraryapi.api.model.entity.BookModel;
 
 public class BookModelMock {
@@ -37,6 +36,15 @@ public class BookModelMock {
                 .author("Zelda")
                 .title("The Legend of Zelda")
                 .isbn("N-SWITCH")
+                .build();
+    }
+
+    public static BookModel mockBookWithIdToLoanBook() {
+        return BookModel.builder()
+                .id(1L)
+                .author("Eker,T. Harv")
+                .title("Os Segredos da Mente Milionária")
+                .isbn("8575422391")
                 .build();
     }
 
