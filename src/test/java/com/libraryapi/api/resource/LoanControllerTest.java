@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,7 +24,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -33,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest // Para REST
 @AutoConfigureMockMvc // Para REST
 // TESTE UNITÁRIO
-@EnableAutoConfiguration
 class LoanControllerTest {
 
     static final String LOAN_API = "/api/loans";
@@ -70,24 +70,23 @@ class LoanControllerTest {
                 .andExpect(content().string(BookModelMock.mockBookWithIdToLoanBook().getId().toString()));
     }
 
+    @Test
+    @DisplayName("Deve retornar erro ao tentar fazer um emprestimo de livro inexistente.")
+    void invalidIsbnCreateLoanTest() throws Exception {
+        // Cenario
+        var json = new ObjectMapper().writeValueAsString(LoanDTOMock.createMock());
 
-//    @Test
-//    @DisplayName("Deve retornar erro ao tentar fazer um emprestimo de livro inexistente.")
-//    void invalidIsbnCreateLoanTest() throws Exception {
-//        // Cenario
-//        var json = new ObjectMapper().writeValueAsString(LoanDTOMock.createMock());
-//
-//        BDDMockito.given(bookServices.getBookByIsbn(LoanDTOMock.createMock().getIsbn())).willReturn(Optional.empty());
-//        // Execução
-//        var request = MockMvcRequestBuilders.post(LOAN_API)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(json);
-//
-//        // Verificação
-//        mockMvc.perform(request)
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("errors", hasSize(1)))
-//                .andExpect(jsonPath("errors[0]").value("Book not found for passed isbn"));
-//    }
+        BDDMockito.given(bookServices.getBookByIsbn(LoanDTOMock.createMock().getIsbn())).willReturn(Optional.empty());
+        // Execução
+        var request = MockMvcRequestBuilders.post(LOAN_API)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        // Verificação
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", hasSize(1)))
+                .andExpect(jsonPath("errors[0]").value("Book not found for passed isbn"));
+    }
 }

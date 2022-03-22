@@ -1,9 +1,7 @@
 package com.libraryapi.api.resource;
 
 import com.libraryapi.api.dto.BookDTO;
-import com.libraryapi.api.exception.ApiErrors;
 import com.libraryapi.api.model.entity.BookModel;
-import com.libraryapi.exception.BusinessException;
 import com.libraryapi.service.BookServices;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -12,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,15 +84,5 @@ public class BookController {
     }
 
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrors handlerIllegalArgumentException(IllegalArgumentException ex) {
-        return new ApiErrors(ex);
-    }
 
-    @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrors handlerBusinessException(BusinessException ex) {
-        return new ApiErrors(ex);
-    }
 }
