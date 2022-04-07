@@ -176,4 +176,16 @@ class BookServiceTest {
         assertThat(result.getPageable().getPageSize()).isEqualTo(10);
     }
 
+    @Test
+    @DisplayName("Deve opter um livro pelo isbn")
+    void getBookByIsbn() {
+        // Cenario
+        when(bookRepository.findByIsbn(anyString())).thenReturn(Optional.of(BookModelMock.getMockBook()));
+
+        // Execução
+        var result = bookServices.getBookByIsbn(BookModelMock.getMockBook().getIsbn());
+
+        // Verificação
+        assertThat(result).isPresent();
+    }
 }

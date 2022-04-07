@@ -57,7 +57,7 @@ class LoanControllerTest {
         BDDMockito.given(bookServices.getBookByIsbn(LoanDTOMock.createMock().getIsbn()))
                 .willReturn(Optional.of(BookModelMock.mockBookWithIdToLoanBook()));
 
-        BDDMockito.given(loanService.save(Mockito.any(LoanModel.class))).willReturn(LoanModelMock.getMock());
+        BDDMockito.given(loanService.save(Mockito.any(LoanModel.class))).willReturn(LoanModelMock.get());
 
         // Execução
         var request = MockMvcRequestBuilders.post(LOAN_API)
@@ -114,4 +114,6 @@ class LoanControllerTest {
                 .andExpect(jsonPath("errors", hasSize(1)))
                 .andExpect(jsonPath("errors[0]").value("Book already loaned"));
     }
+
+
 }

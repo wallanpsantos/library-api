@@ -6,9 +6,18 @@ import java.time.LocalDate;
 
 public class LoanModelMock {
 
-    public static LoanModel getMock() {
+    public static LoanModel get() {
         return LoanModel.builder()
                 .id(1L)
+                .customer("Eker,T. Harv")
+                .book(BookModelMock.mockBookWithIdToLoanBook())
+                .localDate(LocalDate.now())
+                .returned(true)
+                .build();
+    }
+
+    public static LoanModel getNotId() {
+        return LoanModel.builder()
                 .customer("Eker,T. Harv")
                 .book(BookModelMock.mockBookWithIdToLoanBook())
                 .localDate(LocalDate.now())

@@ -65,6 +65,6 @@ public class BookServiceImpl implements BookServices {
 
     @Override
     public Optional<BookModel> getBookByIsbn(String isbn) {
-        return Optional.empty();
+        return repository.findByIsbn(isbn);
     }
 }

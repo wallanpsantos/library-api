@@ -10,5 +10,7 @@ public interface BookRepository extends JpaRepository<BookModel, Long> {
     boolean existsByIsbn(String isbn);
 
     @Override
-    Optional<BookModel> findById(Long aLong);
+    Optional<BookModel> findById(Long id);
+
+    Optional<BookModel> findByIsbn(String isbn);
 }
