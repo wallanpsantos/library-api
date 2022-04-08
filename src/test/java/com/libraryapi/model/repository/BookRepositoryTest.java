@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BookRepositoryTest {
 
     @Autowired
-    TestEntityManager entityManager;
+    private TestEntityManager entityManager;
 
     @Autowired
-    BookRepository bookRepository;
+    private BookRepository bookRepository;
 
     @Test
     @DisplayName("Deve retornar verdadeiro quando existir um livro na base com isbn informado")

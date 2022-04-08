@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@WebMvcTest // Para REST
+@WebMvcTest// Para REST
 @AutoConfigureMockMvc // Para REST
 // TESTE UNITARIO
 class BookControllerTest {

@@ -3,7 +3,7 @@ package com.libraryapi.api.resource;
 import com.libraryapi.api.dto.BookDTO;
 import com.libraryapi.api.model.entity.BookModel;
 import com.libraryapi.service.BookServices;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,10 +25,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookController {
 
     private BookServices bookServices;
+
     private ModelMapper modelMapper;
 
     @PostMapping
@@ -82,7 +83,6 @@ public class BookController {
 
         return new PageImpl<>(list, pageRequest, result.getTotalPages());
     }
-
 
 
 }
