@@ -1,5 +1,6 @@
 package com.libraryapi.service;
 
+import com.libraryapi.exception.BusinessException;
 import com.libraryapi.mocks.api.model.entity.LoanModelMock;
 import com.libraryapi.repository.LoanRepository;
 import com.libraryapi.service.impl.LoanServiceImpl;
@@ -12,6 +13,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -35,6 +39,7 @@ class LoanServiceTest {
         // Canario
         var loan = LoanModelMock.getNotId();
         when(loanRepository.save(loan)).thenReturn(LoanModelMock.get());
+        when(loanRepository.existsByBook(loan.getBook())).thenReturn(false);
 
         // Execução
         var result = loanService.save(loan);
@@ -43,5 +48,21 @@ class LoanServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(LoanModelMock.get().getId());
         assertThat(result.getBook().getId()).isEqualTo(LoanModelMock.get().getBook().getId());
+    }
+
+    @Test
+    @DisplayName("Deve lançar erro de negócio ao tentar salvar um livro já emprestado")
+    void loanedBookSaveTest() {
+
+        // Canario e Execução
+        var loan = LoanModelMock.getNotId();
+        when(loanRepository.existsByBook(loan.getBook())).thenReturn(true);
+
+        var exception = catchThrowable(() -> loanService.save(loan));
+
+        // Verificação
+        assertThat(exception).isInstanceOf(BusinessException.class).hasMessage("Book already loaned");
+
+        verify(loanRepository, never()).save(LoanModelMock.get());
     }
 }

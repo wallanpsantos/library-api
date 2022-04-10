@@ -1,6 +1,7 @@
 package com.libraryapi.service.impl;
 
 import com.libraryapi.api.model.entity.LoanModel;
+import com.libraryapi.exception.BusinessException;
 import com.libraryapi.repository.LoanRepository;
 import com.libraryapi.service.LoanService;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,15 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanModel save(LoanModel loanModel) {
+
         if (Objects.isNull(loanModel)) {
             throw new IllegalArgumentException("Objeto nulo passado no parametro");
         }
-        return loanRepository.save(loanModel);
 
+        if (loanRepository.existsByBook(loanModel.getBook())) {
+            throw new BusinessException("Book already loaned");
+        }
+
+        return loanRepository.save(loanModel);
     }
 }
