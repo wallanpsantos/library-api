@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface BookServices {
+
     BookModel save(BookModel bookModel);
 
     Optional<BookModel> getById(Long id);

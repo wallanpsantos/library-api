@@ -3,6 +3,7 @@ package com.libraryapi.api.resource;
 import com.libraryapi.api.dto.BookDTO;
 import com.libraryapi.api.model.entity.BookModel;
 import com.libraryapi.service.BookServices;
+import com.libraryapi.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -28,9 +29,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookController {
 
-    private BookServices bookServices;
-
-    private ModelMapper modelMapper;
+    private final BookServices bookServices;
+    private final ModelMapper modelMapper;
+    private final LoanService loanService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

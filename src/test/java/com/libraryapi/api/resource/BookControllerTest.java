@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@WebMvcTest// Para REST
+@WebMvcTest(controllers = BookController.class)// Para REST
 @AutoConfigureMockMvc // Para REST
 // TESTE UNITARIO
 class BookControllerTest {
@@ -62,7 +62,7 @@ class BookControllerTest {
 
         var json = new ObjectMapper().writeValueAsString(BookDTOMock.getMock());
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+        var request = MockMvcRequestBuilders
                 .post(BOOK_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -230,7 +230,7 @@ class BookControllerTest {
     void findBooksTest() throws Exception {
         // Cenario
         BDDMockito.given(bookServices.find(Mockito.any(BookModel.class), Mockito.any(Pageable.class)))
-                .willReturn(new PageImpl<BookModel>(List.of(BookModelMock.getBookMockWithId()), PageRequest.of(0, 100), 1));
+                .willReturn(new PageImpl<>(List.of(BookModelMock.getBookMockWithId()), PageRequest.of(0, 100), 1));
 
         var queryString = String.format("?title=%s&author=%s&page=0&size=100",
                 BookModelMock.getBookMockWithId().getTitle(), BookModelMock.getBookMockWithId().getAuthor());
