@@ -24,4 +24,13 @@ public class LoanModelMock {
                 .returned(true)
                 .build();
     }
+
+    public static LoanModel getNotIdLoanAndBook() {
+        return LoanModel.builder()
+                .customer("Eker,T. Harv")
+                .book(BookModelMock.getBookMockNotId())
+                .localDate(LocalDate.now())
+                .returned(true)
+                .build();
+    }
 }
