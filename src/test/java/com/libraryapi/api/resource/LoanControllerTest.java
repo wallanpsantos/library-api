@@ -1,6 +1,7 @@
 package com.libraryapi.api.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.libraryapi.api.dto.LoanReturnedDTO;
 import com.libraryapi.api.model.entity.LoanModel;
 import com.libraryapi.exception.BusinessException;
 import com.libraryapi.mocks.api.dto.LoanDTOMock;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +26,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,7 +61,7 @@ class LoanControllerTest {
         BDDMockito.given(bookServices.getBookByIsbn(LoanDTOMock.createMock().getIsbn()))
                 .willReturn(Optional.of(BookModelMock.mockBookWithIdToLoanBook()));
 
-        BDDMockito.given(loanService.save(Mockito.any(LoanModel.class))).willReturn(LoanModelMock.get());
+        BDDMockito.given(loanService.save(any(LoanModel.class))).willReturn(LoanModelMock.get());
 
         // Execução
         var request = MockMvcRequestBuilders.post(LOAN_API)
@@ -101,7 +105,7 @@ class LoanControllerTest {
         BDDMockito.given(bookServices.getBookByIsbn(LoanDTOMock.createMock().getIsbn()))
                 .willReturn(Optional.of(BookModelMock.mockBookWithIdToLoanBook()));
 
-        BDDMockito.given(loanService.save(Mockito.any(LoanModel.class))).willThrow(new BusinessException("Book already loaned"));
+        BDDMockito.given(loanService.save(any(LoanModel.class))).willThrow(new BusinessException("Book already loaned"));
         // Execução
         var request = MockMvcRequestBuilders.post(LOAN_API)
                 .accept(MediaType.APPLICATION_JSON)
@@ -115,5 +119,26 @@ class LoanControllerTest {
                 .andExpect(jsonPath("errors[0]").value("Book already loaned"));
     }
 
+    @Test
+    @DisplayName("Deve retornar um livro")
+    void returnedTrueBookTest() throws Exception {
+        // Cenario
+        var returnedDTO = new LoanReturnedDTO(true);
+        var loan = LoanModelMock.get();
+
+        var json = new ObjectMapper().writeValueAsString(returnedDTO);
+
+        BDDMockito.given(loanService.getById(anyLong())).willReturn(Optional.of(loan));
+
+        // Execução e Verificação
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch(LOAN_API.concat("/1"))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andExpect(status().isOk());
+
+        verify(loanService, times(1)).update(loan);
+    }
 
 }

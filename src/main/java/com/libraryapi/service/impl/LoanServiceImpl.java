@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +28,15 @@ public class LoanServiceImpl implements LoanService {
         }
 
         return loanRepository.save(loanModel);
+    }
+
+    @Override
+    public Optional<LoanModel> getById(Long id) {
+        return Optional.of(loanRepository.getById(String.valueOf(id)));
+    }
+
+    @Override
+    public LoanModel update(LoanModel loan) {
+        return loanRepository.save(loan);
     }
 }
