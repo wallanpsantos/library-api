@@ -27,7 +27,7 @@ public class LoanModelMock {
 
     public static LoanModel getNotIdLoanAndBook() {
         return LoanModel.builder()
-                .customer("Eker,T. Harv")
+                .customer("Yoshi Adventure")
                 .book(BookModelMock.getBookMockNotId())
                 .localDate(LocalDate.now())
                 .returned(true)

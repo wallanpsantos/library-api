@@ -1,7 +1,7 @@
 package com.libraryapi.model.repository;
 
+import com.libraryapi.api.model.entity.LoanModel;
 import com.libraryapi.mocks.api.model.entity.BookModelMock;
-import com.libraryapi.mocks.api.model.entity.LoanModelMock;
 import com.libraryapi.repository.LoanRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
-public class LoanRespositoryTest {
+class LoanRespositoryTest {
 
     @Autowired
     private LoanRepository loanRepository;
@@ -30,13 +34,14 @@ public class LoanRespositoryTest {
         var book = BookModelMock.getBookMockNotId();
         entityManager.persist(book);
 
-        var loan = LoanModelMock.getNotIdLoanAndBook();
+        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").localDate(LocalDate.now()).build();
         entityManager.persist(loan);
-
+        
         // Execução
-
+        var exists = loanRepository.existsByBookAndNotReturned(book);
 
         // Verificação
+        assertThat(exists).isTrue();
 
     }
 }

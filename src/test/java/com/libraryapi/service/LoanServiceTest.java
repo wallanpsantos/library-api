@@ -39,7 +39,7 @@ class LoanServiceTest {
         // Canario
         var loan = LoanModelMock.getNotId();
         when(loanRepository.save(loan)).thenReturn(LoanModelMock.get());
-        when(loanRepository.existsByBook(loan.getBook())).thenReturn(false);
+        when(loanRepository.existsByBookAndNotReturned(loan.getBook())).thenReturn(false);
 
         // Execução
         var result = loanService.save(loan);
@@ -56,7 +56,7 @@ class LoanServiceTest {
 
         // Canario e Execução
         var loan = LoanModelMock.getNotId();
-        when(loanRepository.existsByBook(loan.getBook())).thenReturn(true);
+        when(loanRepository.existsByBookAndNotReturned(loan.getBook())).thenReturn(true);
 
         var exception = catchThrowable(() -> loanService.save(loan));
 

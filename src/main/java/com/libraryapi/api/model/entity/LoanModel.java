@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
+@Setter
 @Getter
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,12 +30,17 @@ public class LoanModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String customer;
 
     @JoinColumn(name = "id_book")
     @ManyToOne
     private BookModel book;
 
+    @Column
     private LocalDate localDate;
+
+    @Column
     private Boolean returned;
+
 }

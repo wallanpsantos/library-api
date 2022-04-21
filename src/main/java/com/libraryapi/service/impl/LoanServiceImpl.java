@@ -22,7 +22,7 @@ public class LoanServiceImpl implements LoanService {
             throw new IllegalArgumentException("Objeto nulo passado no parametro");
         }
 
-        if (loanRepository.existsByBook(loanModel.getBook())) {
+        if (loanRepository.existsByBookAndNotReturned(loanModel.getBook())) {
             throw new BusinessException("Book already loaned");
         }
 
