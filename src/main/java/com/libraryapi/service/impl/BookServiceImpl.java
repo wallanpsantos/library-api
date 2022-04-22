@@ -18,19 +18,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookServices {
 
-    private final BookRepository repository;
+    private final BookRepository bookRepository;
 
     @Override
     public BookModel save(BookModel bookModel) {
-        if (repository.existsByIsbn(bookModel.getIsbn())) {
+        if (bookRepository.existsByIsbn(bookModel.getIsbn())) {
             throw new BusinessException("ISBN já cadastrado");
         }
-        return repository.save(bookModel);
+        return bookRepository.save(bookModel);
     }
 
     @Override
     public Optional<BookModel> getById(Long id) {
-        return this.repository.findById(id);
+        return this.bookRepository.findById(id);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookServices {
         if (Objects.isNull(book) || Objects.isNull(book.getId())) {
             throw new IllegalArgumentException("Erro ao deletar book");
         }
-        this.repository.delete(book);
+        this.bookRepository.delete(book);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class BookServiceImpl implements BookServices {
         if (Objects.isNull(book) || Objects.isNull(book.getId())) {
             throw new IllegalArgumentException("Erro ao atualizar book");
         }
-        return this.repository.save(book);
+        return this.bookRepository.save(book);
     }
 
     @Override
-    public Page<BookModel> find(BookModel filter, Pageable pageRequest) {
-        Example<BookModel> example = Example.of(filter,
+    public Page<BookModel> find(BookModel filterDTO, Pageable pageRequest) {
+        Example<BookModel> example = Example.of(filterDTO,
                 ExampleMatcher
                         .matching()
                         .withIgnoreCase()
@@ -60,11 +60,11 @@ public class BookServiceImpl implements BookServices {
                         exatamente o valor, ou qualquer parte do valor/texto passado */
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
         );
-        return repository.findAll(example, pageRequest);
+        return bookRepository.findAll(example, pageRequest);
     }
 
     @Override
     public Optional<BookModel> getBookByIsbn(String isbn) {
-        return repository.findByIsbn(isbn);
+        return bookRepository.findByIsbn(isbn);
     }
 }
