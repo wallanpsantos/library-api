@@ -12,9 +12,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,5 +67,24 @@ class LoanServiceTest {
         assertThat(exception).isInstanceOf(BusinessException.class).hasMessage("Book already loaned");
 
         verify(loanRepository, never()).save(LoanModelMock.get());
+    }
+
+    @Test
+    @DisplayName("Deve obter as informações de um empréstimo pelo ID")
+    void getLoanDetailsTest() {
+        // Canario
+        var loan = LoanModelMock.get();
+
+        when(loanRepository.findById(loan.getId())).thenReturn(Optional.of(loan));
+
+        // Execução
+        var result = loanService.getById(loan.getId());
+
+        // Verificação
+        assertThat(result).isPresent();
+        assertThat(result.get().getId()).isEqualTo(loan.getId());
+        assertThat(result.get().getCustomer()).isEqualTo(loan.getCustomer());
+
+        verify(loanRepository, times(1)).findById(loan.getId());
     }
 }

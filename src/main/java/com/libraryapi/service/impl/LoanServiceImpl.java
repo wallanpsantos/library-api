@@ -20,7 +20,7 @@ public class LoanServiceImpl implements LoanService {
     public LoanModel save(LoanModel loanModel) {
 
         if (Objects.isNull(loanModel)) {
-            throw new IllegalArgumentException("Objeto nulo passado no parametro");
+            throw new IllegalArgumentException("Parametro do tipo não Loan");
         }
 
         if (loanRepository.existsByBookAndNotReturned(loanModel.getBook())) {
@@ -32,7 +32,10 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Optional<LoanModel> getById(Long id) {
-        return Optional.of(loanRepository.getById(String.valueOf(id)));
+        if (Objects.isNull(id)) {
+            throw new IllegalArgumentException("Parametro do tipo não long");
+        }
+        return loanRepository.findById(id);
     }
 
     @Override
