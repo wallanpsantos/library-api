@@ -1,5 +1,6 @@
 package com.libraryapi.service;
 
+import com.libraryapi.api.model.entity.LoanModel;
 import com.libraryapi.exception.BusinessException;
 import com.libraryapi.mocks.api.model.entity.LoanModelMock;
 import com.libraryapi.repository.LoanRepository;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -87,4 +89,37 @@ class LoanServiceTest {
 
         verify(loanRepository, times(1)).findById(loan.getId());
     }
+
+    @Test
+    @DisplayName("Deve atualizar um emprestimo")
+    void updateLoanTest() {
+        // Canario
+        var loan = LoanModelMock.get();
+
+        when(loanRepository.save(any(LoanModel.class))).thenReturn(loan);
+
+        // Execução
+        var updating = loanService.update(loan);
+
+        // Verificação
+        assertThat(updating.getReturned()).isTrue();
+        verify(loanRepository, times(1)).save(loan);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -39,7 +39,10 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public LoanModel update(LoanModel loan) {
-        return loanRepository.save(loan);
+    public LoanModel update(LoanModel loanModel) {
+        if (Objects.isNull(loanModel)) {
+            throw new IllegalArgumentException("Parametro do tipo não Loan");
+        }
+        return loanRepository.save(loanModel);
     }
 }

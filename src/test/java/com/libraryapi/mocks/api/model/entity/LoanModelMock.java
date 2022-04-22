@@ -33,4 +33,14 @@ public class LoanModelMock {
                 .returned(true)
                 .build();
     }
+
+    public static LoanModel getReturnedFalse() {
+        return LoanModel.builder()
+                .id(1L)
+                .customer("Eker,T. Harv")
+                .book(BookModelMock.mockBookWithIdToLoanBook())
+                .localDate(LocalDate.now())
+                .returned(false)
+                .build();
+    }
 }
