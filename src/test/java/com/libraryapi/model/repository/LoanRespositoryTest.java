@@ -36,7 +36,7 @@ class LoanRespositoryTest {
 
         var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").localDate(LocalDate.now()).build();
         entityManager.persist(loan);
-        
+
         // Execução
         var exists = loanRepository.existsByBookAndNotReturned(book);
 
