@@ -1,10 +1,14 @@
 package com.libraryapi.api.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@RequiredArgsConstructor
 public class LoanFilterDTO {
 
-    private String isbn;
-    private String customer;
+    private final String isbn;
+    private final String customer;
 }

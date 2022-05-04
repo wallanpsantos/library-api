@@ -61,6 +61,6 @@ public class LoanServiceImpl implements LoanService {
 //                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
 //        );
 //        return loanRepository.findAll(example, page);
-        return null;
+        return loanRepository.findByBookIsbnOrCustomer(filterDTO.getIsbn(), filterDTO.getCustomer(), page);
     }
 }
