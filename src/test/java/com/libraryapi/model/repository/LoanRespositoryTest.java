@@ -2,6 +2,7 @@ package com.libraryapi.model.repository;
 
 import com.libraryapi.api.model.entity.LoanModel;
 import com.libraryapi.mocks.api.model.entity.BookModelMock;
+import com.libraryapi.mocks.api.model.entity.LoanModelMock;
 import com.libraryapi.repository.LoanRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -44,4 +46,20 @@ class LoanRespositoryTest {
         assertThat(exists).isTrue();
 
     }
+
+    @Test
+    @DisplayName("Deve buscar um empréstimo pelo isbn do livro ou customer")
+    void findByBookIsbnOrCustomerTest() {
+        var loan = LoanModelMock.get();
+
+        var result = loanRepository.findByBookIsbnOrCustomer("8575422391", "Eker,T. Harv",
+                PageRequest.of(0, 10));
+
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent()).contains(loan);
+        assertThat(result.getPageable().getPageSize()).isEqualTo(10);
+        assertThat(result.getPageable().getPageNumber()).isZero();
+        assertThat(result.getTotalElements()).isEqualTo(1);
+    }
+
 }
