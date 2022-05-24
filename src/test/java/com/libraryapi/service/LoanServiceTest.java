@@ -121,7 +121,7 @@ class LoanServiceTest {
 
         Page<LoanModel> page = new PageImpl<>(list, pageRequest, list.size());
 
-        when(loanRepository.findByBookIsbnOrCustomer(anyString(), anyString(), any(PageRequest.class))).thenReturn(page);
+        when(loanRepository.findByIsbnOrCustomer(anyString(), anyString(), any(PageRequest.class))).thenReturn(page);
 
         // Execução
         Page<LoanModel> result = loanService.find(LoanFilterDTOMock.get(), pageRequest);

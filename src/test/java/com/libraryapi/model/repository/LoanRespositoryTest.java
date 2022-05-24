@@ -2,7 +2,6 @@ package com.libraryapi.model.repository;
 
 import com.libraryapi.api.model.entity.LoanModel;
 import com.libraryapi.mocks.api.model.entity.BookModelMock;
-import com.libraryapi.mocks.api.model.entity.LoanModelMock;
 import com.libraryapi.repository.LoanRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,16 +49,24 @@ class LoanRespositoryTest {
     @Test
     @DisplayName("Deve buscar um empréstimo pelo isbn do livro ou customer")
     void findByBookIsbnOrCustomerTest() {
-        var loan = LoanModelMock.get();
 
-        var result = loanRepository.findByBookIsbnOrCustomer("8575422391", "Eker,T. Harv",
-                PageRequest.of(0, 10));
+        // Cenario
+        var book = BookModelMock.getBookMockNotId();
+        entityManager.persist(book);
 
+        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").localDate(LocalDate.now()).build();
+        entityManager.persist(loan);
+
+        // Execução
+        var result = loanRepository.findByBookIsbnOrCustomer("360", "Yoshi Adventure", PageRequest.of(0, 10));
+
+        // Verificação
         assertThat(result.getContent()).hasSize(1);
         assertThat(result.getContent()).contains(loan);
         assertThat(result.getPageable().getPageSize()).isEqualTo(10);
         assertThat(result.getPageable().getPageNumber()).isZero();
         assertThat(result.getTotalElements()).isEqualTo(1);
+
     }
 
 }

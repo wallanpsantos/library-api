@@ -51,16 +51,6 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Page<LoanModel> find(LoanFilterDTO filterDTO, Pageable page) {
-//        Example<LoanModel> example = Example.of(filterDTO,
-//                ExampleMatcher
-//                        .matching()
-//                        .withIgnoreCase()
-//                        .withIgnoreNullValues()
-//                        /* .withStringMatcher(ExampleMatcher.StringMatcher.) -> Comparar pelo inicio, pelo fim,
-//                        exatamente o valor, ou qualquer parte do valor/texto passado */
-//                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-//        );
-//        return loanRepository.findAll(example, page);
-        return loanRepository.findByBookIsbnOrCustomer(filterDTO.getIsbn(), filterDTO.getCustomer(), page);
+        return loanRepository.findByIsbnOrCustomer(filterDTO.getIsbn(), filterDTO.getCustomer(), page);
     }
 }
