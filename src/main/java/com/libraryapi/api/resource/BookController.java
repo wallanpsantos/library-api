@@ -1,6 +1,7 @@
 package com.libraryapi.api.resource;
 
 import com.libraryapi.api.dto.BookDTO;
+import com.libraryapi.api.dto.LoanDTO;
 import com.libraryapi.api.model.entity.BookModel;
 import com.libraryapi.service.BookServices;
 import com.libraryapi.service.LoanService;
@@ -80,9 +81,35 @@ public class BookController {
 
         var result = bookServices.find(filter, pageRequest);
 
-        var list = result.stream().map(bookModel -> modelMapper.map(bookModel, BookDTO.class)).collect(Collectors.toList());
+//        var list = result.stream().map(bookModel -> modelMapper.map(bookModel, BookDTO.class)).collect(Collectors.toList());
+        var list = result.getContent()
+                .stream()
+                .map(bookModel -> modelMapper.map(bookModel, BookDTO.class))
+                .collect(Collectors.toList());
 
         return new PageImpl<>(list, pageRequest, result.getTotalPages());
+    }
+
+    @GetMapping("{id}/loans")
+    public Page<LoanDTO> loansByBook(@PathVariable Long id, Pageable page) {
+
+        var book = bookServices.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        var result = loanService.getLoansByBook(book, page);
+
+//        var list = result.stream().map(loanModel -> modelMapper.map(loanModel, LoanDTO.class)).collect(Collectors.toList());
+        var list = result.getContent()
+                .stream()
+                .map(loanModel -> {
+                    var loanBook = loanModel.getBook();
+                    var bookDTO = modelMapper.map(loanBook, BookDTO.class);
+                    var loanDTO = modelMapper.map(loanModel, LoanDTO.class);
+                    loanDTO.setBookDTO(bookDTO);
+                    return loanDTO;
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(list, page, result.getTotalElements());
     }
 
 

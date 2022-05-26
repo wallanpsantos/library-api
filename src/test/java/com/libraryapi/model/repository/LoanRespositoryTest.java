@@ -49,7 +49,6 @@ class LoanRespositoryTest {
     @Test
     @DisplayName("Deve buscar um empréstimo pelo isbn do livro ou customer")
     void findByBookIsbnOrCustomerTest() {
-
         // Cenario
         var book = BookModelMock.getBookMockNotId();
         entityManager.persist(book);
