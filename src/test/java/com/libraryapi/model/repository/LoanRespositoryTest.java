@@ -35,7 +35,7 @@ class LoanRespositoryTest {
         var book = BookModelMock.getBookMockNotId();
         entityManager.persist(book);
 
-        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").localDate(LocalDate.now()).build();
+        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").loanDate(LocalDate.now()).build();
         entityManager.persist(loan);
 
         // Execução
@@ -53,7 +53,7 @@ class LoanRespositoryTest {
         var book = BookModelMock.getBookMockNotId();
         entityManager.persist(book);
 
-        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").localDate(LocalDate.now()).build();
+        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").loanDate(LocalDate.now()).build();
         entityManager.persist(loan);
 
         // Execução
@@ -68,4 +68,37 @@ class LoanRespositoryTest {
 
     }
 
+    @Test
+    @DisplayName("Deve obter empréstimos cuja data emprestimo for menor ou igual a tres dias atras e não retornados")
+    void findByLoanDateLessThanAndNotReturned() {
+        // Cenario
+        var book = BookModelMock.getBookMockNotId();
+        entityManager.persist(book);
+
+        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").loanDate(LocalDate.now().minusDays(5)).build();
+        entityManager.persist(loan);
+
+        // Execução
+        var result = loanRepository.findByLoanDateLessThanAndNotReturned(LocalDate.now().minusDays(4));
+
+        // Verificação
+        assertThat(result).hasSize(1).contains(loan);
+    }
+
+    @Test
+    @DisplayName("Não deve obter empréstimos cuja data emprestimo for menor ou igual a tres dias atras e não retornados")
+    void notFindByLoanDateLessThanAndNotReturned() {
+        // Cenario
+        var book = BookModelMock.getBookMockNotId();
+        entityManager.persist(book);
+
+        var loan = LoanModel.builder().book(book).customer("Yoshi Adventure").loanDate(LocalDate.now()).build();
+        entityManager.persist(loan);
+
+        // Execução
+        var result = loanRepository.findByLoanDateLessThanAndNotReturned(LocalDate.now().minusDays(4));
+
+        // Verificação
+        assertThat(result).isEmpty();
+    }
 }

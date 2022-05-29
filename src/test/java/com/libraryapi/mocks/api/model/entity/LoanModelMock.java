@@ -12,7 +12,7 @@ public class LoanModelMock {
                 .customer("Eker,T. Harv")
                 .email("test.email@mail.com")
                 .book(BookModelMock.mockBookWithIdToLoanBook())
-                .localDate(LocalDate.now())
+                .loanDate(LocalDate.now())
                 .returned(true)
                 .build();
     }
@@ -21,7 +21,7 @@ public class LoanModelMock {
         return LoanModel.builder()
                 .customer("Eker,T. Harv")
                 .book(BookModelMock.mockBookWithIdToLoanBook())
-                .localDate(LocalDate.now())
+                .loanDate(LocalDate.now())
                 .returned(true)
                 .build();
     }
@@ -30,7 +30,7 @@ public class LoanModelMock {
         return LoanModel.builder()
                 .customer("Yoshi Adventure")
                 .book(BookModelMock.getBookMockNotId())
-                .localDate(LocalDate.now())
+                .loanDate(LocalDate.now())
                 .returned(true)
                 .build();
     }
@@ -40,7 +40,7 @@ public class LoanModelMock {
                 .id(1L)
                 .customer("Eker,T. Harv")
                 .book(BookModelMock.mockBookWithIdToLoanBook())
-                .localDate(LocalDate.now())
+                .loanDate(LocalDate.now())
                 .returned(false)
                 .build();
     }

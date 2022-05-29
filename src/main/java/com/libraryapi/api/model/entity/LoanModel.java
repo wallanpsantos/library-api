@@ -41,7 +41,7 @@ public class LoanModel {
     private BookModel book;
 
     @Column
-    private LocalDate localDate;
+    private LocalDate loanDate;
 
     @Column
     private Boolean returned;

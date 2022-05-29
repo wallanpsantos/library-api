@@ -6,6 +6,7 @@ import com.libraryapi.api.model.entity.LoanModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LoanService {
@@ -19,4 +20,6 @@ public interface LoanService {
     Page<LoanModel> find(LoanFilterDTO filterDTO, Pageable page);
 
     Page<LoanModel> getLoansByBook(BookModel book, Pageable page);
+
+    List<LoanModel> getOverdueLoans();
 }

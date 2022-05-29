@@ -45,7 +45,7 @@ public class LoanController {
         var entity = LoanModel.builder()
                 .customer(dto.getCustomer())
                 .book(book)
-                .localDate(LocalDate.now())
+                .loanDate(LocalDate.now())
                 .build();
 
         entity = loanService.save(entity);
