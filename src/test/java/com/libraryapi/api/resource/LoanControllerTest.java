@@ -45,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest // Para REST
 @AutoConfigureMockMvc // Para REST
 // TESTE UNITÁRIO
+@DisplayName("Teste unitário end point de emprestimos ")
 class LoanControllerTest {
 
     static final String LOAN_API = "/api/loans";

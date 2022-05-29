@@ -33,6 +33,9 @@ public class LoanModel {
     @Column
     private String customer;
 
+    @Column(name = "customer_email")
+    private String email;
+
     @JoinColumn(name = "id_book")
     @ManyToOne
     private BookModel book;

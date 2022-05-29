@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 @DataJpaTest // Para teste de integração com banco de dados utiliza o H2 em memoria para o teste
 // TESTE DE INTEGRAÇÃO
+@DisplayName("Teste integração BookRepository")
 class BookRepositoryTest {
 
     @Autowired

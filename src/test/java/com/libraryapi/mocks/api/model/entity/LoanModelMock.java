@@ -10,6 +10,7 @@ public class LoanModelMock {
         return LoanModel.builder()
                 .id(1L)
                 .customer("Eker,T. Harv")
+                .email("test.email@mail.com")
                 .book(BookModelMock.mockBookWithIdToLoanBook())
                 .localDate(LocalDate.now())
                 .returned(true)
