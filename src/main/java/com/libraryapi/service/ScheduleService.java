@@ -32,7 +32,7 @@ public class ScheduleService {
 
         System.out.println(message);
 
-        emailService.sendEmail(emails);
+        emailService.sendEmail(message, emails);
 
     }
 }

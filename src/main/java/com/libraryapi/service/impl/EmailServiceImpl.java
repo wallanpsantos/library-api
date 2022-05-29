@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public class EmailServiceImpl implements EmailService {
     @Override
-    public void sendEmail(List<String> emails) {
+    public void sendEmail(String message, List<String> emails) {
 
     }
 }
