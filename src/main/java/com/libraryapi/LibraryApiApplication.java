@@ -17,7 +17,7 @@ import java.util.List;
 public class LibraryApiApplication {
 
     @Value("${loan.overdue.message}")
-    private String message;
+    private String message; // Variavel para testar o envio de email com mensagem
     @Autowired
     private EmailService emailService;
 
@@ -26,10 +26,13 @@ public class LibraryApiApplication {
         return new ModelMapper();
     }
 
+    /*
+     * Metodo para testar o envio de email
+     * */
     @Bean
     public CommandLineRunner runner() {
         return args -> {
-            var emails = List.of("wallanpereira09@gmail.com");
+            var emails = List.of("wallanpsantos.dev@yahoo.com");
             emailService.sendEmail(message, emails);
             System.out.println("Executado envio de e-mail :D");
         };
