@@ -33,7 +33,7 @@ public class LibraryApiApplication {
     public CommandLineRunner runner() {
         return args -> {
             var emails = List.of("wallanpsantos.dev@yahoo.com");
-            emailService.sendEmail(message, emails);
+            emailService.sendEmail("Empréstimo atrasado. Favor entrar em contato com a biblioteca para quitar seu empréstimo!", emails);
             System.out.println("Executado envio de e-mail :D");
         };
     }
