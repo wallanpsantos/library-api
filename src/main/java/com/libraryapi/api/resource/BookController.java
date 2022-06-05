@@ -5,6 +5,8 @@ import com.libraryapi.api.dto.LoanDTO;
 import com.libraryapi.api.model.entity.BookModel;
 import com.libraryapi.service.BookServices;
 import com.libraryapi.service.LoanService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
+@Api("Endpoint to Books")
 public class BookController {
 
     private final BookServices bookServices;
@@ -36,6 +39,7 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create a book")
     public BookDTO create(@RequestBody @Valid BookDTO bookDTO) {
         var entity = modelMapper.map(bookDTO, BookModel.class);
 
@@ -46,6 +50,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Search details of a book by ID")
     public BookDTO getBookDetails(@PathVariable Long id) {
 
         var book = bookServices.getById(id);
@@ -57,6 +62,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Delete a book by ID")
     public void deleteBook(@PathVariable Long id) {
         var book = bookServices.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -64,6 +70,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "Updates a past book Author and Title")
     public BookDTO updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO) {
 
         return bookServices.getById(id).map(book -> {
