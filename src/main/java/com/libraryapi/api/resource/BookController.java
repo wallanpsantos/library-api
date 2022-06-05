@@ -7,6 +7,8 @@ import com.libraryapi.service.BookServices;
 import com.libraryapi.service.LoanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -40,6 +42,9 @@ public class BookController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a book")
+    @ApiResponses({
+            @ApiResponse(code = 401, message = "Unauthorized request, verify credentials.")
+    })
     public BookDTO create(@RequestBody @Valid BookDTO bookDTO) {
         var entity = modelMapper.map(bookDTO, BookModel.class);
 
