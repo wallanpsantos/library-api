@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
 @Api("Endpoint to Books")
+@Slf4j
 public class BookController {
 
     private final BookServices bookServices;
@@ -46,6 +48,8 @@ public class BookController {
             @ApiResponse(code = 401, message = "Unauthorized request, verify credentials.")
     })
     public BookDTO create(@RequestBody @Valid BookDTO bookDTO) {
+        log.info("Create a book with Author: {} and Tittle book: {}", bookDTO.getAuthor(), bookDTO.getTitle());
+
         var entity = modelMapper.map(bookDTO, BookModel.class);
 
         entity = bookServices.save(entity);
