@@ -7,19 +7,13 @@ import com.libraryapi.api.model.entity.LoanModel;
 import com.libraryapi.service.BookServices;
 import com.libraryapi.service.LoanService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -29,6 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/loans")
 @AllArgsConstructor
+@Slf4j
 public class LoanController {
 
     private LoanService loanService;
@@ -39,6 +34,8 @@ public class LoanController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long create(@RequestBody LoanDTO dto) {
+        log.info("Create Loan {} with isbn: {}", dto.getBookDTO(), dto.getIsbn());
+
         var book = bookServices.getBookByIsbn(dto.getIsbn())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book not found for passed isbn"));
 

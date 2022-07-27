@@ -38,7 +38,6 @@ public class LibraryApiApplication {
             var emails = List.of("wallanpsantos.dev@yahoo.com");
             emailService.sendEmail("Empréstimo atrasado. Favor entrar em contato com a biblioteca para quitar seu empréstimo!", emails);
             System.out.println("Executado envio de e-mail :D");
-            System.out.println("ID Instancia: " + instanceRandom);
         };
     }
 
