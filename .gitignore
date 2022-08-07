@@ -464,4 +464,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Travis
+.travis.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,linux,eclipse,intellij,intellij+all,intellij+iml,maven,java,visualstudiocode
