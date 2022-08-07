@@ -1,7 +1,29 @@
 language: java
-sudo: true
+
+sudo: false
+
 dist: trusty
-jdk:
-  - openjdk11
+
+# use Java 11
+jdk: openjdk11
+
 before_install:
-  - chmod +x mvnw
+  - curl -s "https://get.sdkman.io" | bash
+  - source "$HOME/.sdkman/bin/sdkman-init.sh"
+  - sdk install java 11.0.16-zulu
+  - sdk use java 11.0.16-zulu
+
+#script:
+#  - jdk_switcher use openjdk11
+#  - # do stuff with OpenJDK 10
+#  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+#  - chmod +x $TRAVIS_BUILD_DIR/install-jdk.sh
+#  - export JAVA_HOME=$HOME/openjdk11
+#  - $TRAVIS_BUILD_DIR/install-jdk.sh -F 11 --target $JAVA_HOME
+#  - # do stuff with open OpenJDK 11
+
+# cache the build tool's caches
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
