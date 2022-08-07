@@ -2,9 +2,6 @@ language: java
 
 dist: trusty
 
-# use Java 11
-#jdk: openjdk11
-
 before_install:
   - chmod +x ./mvnw
   - curl -s "https://get.sdkman.io" | bash
@@ -12,6 +9,10 @@ before_install:
   - sdk install java 11.0.14-zulu
   - sdk use java 11.0.14-zulu
 
+before_script:
+  - chmod a+x ./mvnw
+
+# Compile without running the tests.
 script:
   - ./mvnw clean compile install -DskipTests=true
 

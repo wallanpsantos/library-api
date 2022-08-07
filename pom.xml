@@ -17,6 +17,8 @@
     <description>Project Library API</description>
 
     <properties>
+        <sonar.organization>wallanpsantos</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <java.version>11</java.version>
         <spring-boot-admin.version>2.7.4</spring-boot-admin.version>
     </properties>
