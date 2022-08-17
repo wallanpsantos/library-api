@@ -14,17 +14,17 @@ import java.util.List;
 public class EmailServiceImpl implements EmailService {
 
     @Value("${mail.default-remetent}")
-    private String remetent;
+    private final String remetent;
 
     @Value("${loan.overdue.message}")
-    private String message;
+    private final String message;
 
     private final JavaMailSender javaMailSender;
 
     @Override
     public void sendEmail(String message, List<String> emails) {
 
-        var mails = emails.toArray(new String[emails.size()]);
+        var mails = emails.toArray(new String[0]);
 
         var setupMailMessage = new SimpleMailMessage();
         setupMailMessage.setFrom(remetent);

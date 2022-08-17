@@ -22,22 +22,17 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 // TESTE UNITARIO
 class BookServiceTest {
 
-    BookServices bookServices;
+    private BookServices bookServices;
 
     @MockBean // Muito utilizado para Repository, irá mockar pelo Spring (simular)
-    BookRepository bookRepository;
+    private BookRepository bookRepository;
 
     @BeforeEach
     void setUp() {

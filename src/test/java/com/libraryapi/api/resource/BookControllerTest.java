@@ -9,7 +9,6 @@ import com.libraryapi.mocks.api.model.entity.BookModelMock;
 import com.libraryapi.service.BookServices;
 import com.libraryapi.service.LoanService;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,19 +41,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = BookController.class)// Para REST
 @AutoConfigureMockMvc // Para REST
 // TESTE UNITARIO
-@Disabled
 class BookControllerTest {
 
     static String BOOK_API = "/api/books";
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
-    BookServices bookServices;
+    private BookServices bookServices;
 
     @MockBean
-    LoanService loanService;
+    private LoanService loanService;
 
     @Test
     @DisplayName("Deve criar um livro com sucesso.")

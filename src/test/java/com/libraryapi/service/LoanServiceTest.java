@@ -24,20 +24,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 // TESTE UNITARIO
 class LoanServiceTest {
 
-    LoanService loanService;
+    private LoanService loanService;
 
     @MockBean // Muito utilizado para Repository, irá mockar pelo Spring (simular)
-    LoanRepository loanRepository;
+    private LoanRepository loanRepository;
 
     @BeforeEach
     void setUp() {

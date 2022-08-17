@@ -12,14 +12,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleService {
 
-    /* cron = " Second Minute Hour Day Month Year " */
+    /* cron = "Second Minute Hour Day Month Year" */
     private static final String CRON_OVERDUE_LOANS = "0 0 0 1/1 * ?";
 
     @Value("${loan.overdue.message}")
-    private String message;
+    private final String message;
 
     private final LoanService loanService;
-    private final BookServices bookServices;
     private final EmailService emailService;
 
     @Scheduled(cron = CRON_OVERDUE_LOANS)
@@ -29,8 +28,6 @@ public class ScheduleService {
         var emails = loanService.getOverdueLoans().stream()
                 .map(LoanModel::getEmail)
                 .collect(Collectors.toList());
-
-        System.out.println(message);
 
         emailService.sendEmail(message, emails);
 
