@@ -97,7 +97,6 @@ public class BookController {
 
         var result = bookServices.find(filter, pageRequest);
 
-//        var list = result.stream().map(bookModel -> modelMapper.map(bookModel, BookDTO.class)).collect(Collectors.toList());
         var list = result.getContent()
                 .stream()
                 .map(bookModel -> modelMapper.map(bookModel, BookDTO.class))
@@ -113,7 +112,6 @@ public class BookController {
 
         var result = loanService.getLoansByBook(book, page);
 
-//        var list = result.stream().map(loanModel -> modelMapper.map(loanModel, LoanDTO.class)).collect(Collectors.toList());
         var list = result.getContent()
                 .stream()
                 .map(loanModel -> {
@@ -127,6 +125,5 @@ public class BookController {
 
         return new PageImpl<>(list, page, result.getTotalElements());
     }
-
 
 }
