@@ -1,4 +1,4 @@
-# library-api
+# library-api [![Build Status](https://app.travis-ci.com/wallanpsantos/library-api.svg?branch=main)](https://app.travis-ci.com/wallanpsantos/library-api)
 
 Design de API's RestFul com Spring Boot, TDD e o novo JUnit5
 
