@@ -23,13 +23,9 @@ public class ScheduleService {
 
     @Scheduled(cron = CRON_OVERDUE_LOANS)
     public void sendMailToOverdueLoans() {
-
-
         var emails = loanService.getOverdueLoans().stream()
                 .map(LoanModel::getEmail)
                 .collect(Collectors.toList());
-
         emailService.sendEmail(message, emails);
-
     }
 }
