@@ -11,12 +11,12 @@ before_install:
 
 before_script:
   - chmod a+x ./mvnw
-  - mvn -N wrapper:wrapper
-  - mvn clean install
+#  - mvn -N wrapper:wrapper
+#  - mvn clean install
 
 # Compile without running the tests.
 install:
-  - mvn -N io.takari:maven:wrapper
+  - ./mvnw -N io.takari:maven:wrapper
   - ./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 #script:
 #  - ./mvnw clean compile install -DskipTests=true
