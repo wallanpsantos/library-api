@@ -16,7 +16,7 @@ before_script:
 
 # Compile without running the tests.
 install:
-  - ./mvnw -N io.takari:maven:wrapper
+  - mvn -N io.takari:maven:wrapper
   - ./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 #script:
 #  - ./mvnw clean compile install -DskipTests=true
