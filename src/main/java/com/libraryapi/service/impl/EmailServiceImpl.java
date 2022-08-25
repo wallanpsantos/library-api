@@ -9,22 +9,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
     @Value("${mail.default-remetent}")
-    private final String remetent;
+    private String remetent;
 
     @Value("${loan.overdue.message}")
-    private final String message;
+    private String defaultMessage;
 
     private final JavaMailSender javaMailSender;
 
     @Override
     public void sendEmail(String message, List<String> emails) {
 
-        var mails = emails.toArray(new String[0]);
+        var mails = emails.toArray(new String[emails.size()]);
 
         var setupMailMessage = new SimpleMailMessage();
         setupMailMessage.setFrom(remetent);
