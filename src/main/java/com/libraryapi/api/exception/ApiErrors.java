@@ -4,7 +4,6 @@ import com.libraryapi.exception.BusinessException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ApiErrors {
     List<String> errors;
@@ -18,7 +17,7 @@ public class ApiErrors {
     }
 
     public ApiErrors(ResponseStatusException ex) {
-        this.errors = List.of(Objects.requireNonNull(ex.getReason()));
+        this.errors = List.of(String.valueOf(ex.getMessage()), String.valueOf(ex.getReason()));
     }
 
     public List<String> getErrors() {
