@@ -4,7 +4,7 @@ dist: trusty
 
 before_install:
   - chmod +x ./mvnw
-  - chmod +x mvn
+  - rm -rf target/
   - curl -s "https://get.sdkman.io" | bash
   - source "$HOME/.sdkman/bin/sdkman-init.sh"
   - sdk install java 11.0.14-zulu
@@ -16,10 +16,9 @@ before_script:
 # Compile without running the tests.
 script:
   - ./mvnw clean compile install -DskipTests=true
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
   # cache the build tool's caches
 cache:
   directories:
     - $HOME/.m2
-    - $HOME/.gradle
+  #  - $HOME/.gradle
