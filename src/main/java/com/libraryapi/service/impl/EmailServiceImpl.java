@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendEmail(String message, List<String> emails) {
 
-        var mails = emails.toArray(new String[emails.size()]);
+        var mails = emails.toArray(new String[0]);
 
         var setupMailMessage = new SimpleMailMessage();
         setupMailMessage.setFrom(remetent);
