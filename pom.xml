@@ -27,12 +27,12 @@
 
         <sonar.coverage.exclusions>
 
-            **/libraryapi/utils/*.java,
+            **/libraryapi/utils/JsonUtils.java,
             **/libraryapi/api/dto/*.java,
-            **/libraryapi/api/model/entity/*.java
+            **/libraryapi/api/model/entity/*.java,
+            **/libraryapi/config/*.java
 
         </sonar.coverage.exclusions>
-
 
     </properties>
 
