@@ -27,7 +27,9 @@
 
         <sonar.coverage.exclusions>
 
-            **/libraryapi/utils/*.java
+            **/libraryapi/utils/*.java,
+            **/libraryapi/api/dto/*.java,
+            **/libraryapi/api/model/entity/*.java
 
         </sonar.coverage.exclusions>
 
