@@ -28,6 +28,7 @@
         <sonar.coverage.exclusions>
 
             **/libraryapi/utils/JsonUtils.java,
+            **/libraryapi/LibraryApiApplication.java,
             **/libraryapi/api/dto/*.java,
             **/libraryapi/api/model/entity/*.java,
             **/libraryapi/config/*.java

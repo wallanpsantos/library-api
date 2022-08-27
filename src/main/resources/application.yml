@@ -1,46 +1,43 @@
 spring:
-  application:
-    instance_id: ${random.uuid}
-    name: library-api
-  boot:
-    admin:
-      client:
-        url: http://localhost:8081/
-  jpa:
-    open-in-view: false
-  mail:
-    host: smtp.mail.yahoo.com
-    password: osywsxznsnnnzixm
-    port: 587
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-    protocol: smtp
-    username: wallanpsantos.dev@yahoo.com
-  mvc:
-    pathmatch:
-      matching-strategy: ant-path-matcher
+    application:
+        instance_id: ${random.uuid}
+        name: library-api
+    boot:
+        admin:
+            client:
+                url: http://localhost:8081/
+    jpa:
+        open-in-view: false
+    mail:
+        host: smtp.mail.yahoo.com
+        password: osywsxznsnnnzixm
+        port: 587
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+        protocol: smtp
+        username: wallanpsantos.dev@yahoo.com
+    mvc:
+        pathmatch:
+            matching-strategy: ant-path-matcher
 management:
-  endpoint:
-    health:
-      show-details: always
-    loggers:
-      enabled: true
-    web:
-      exposure:
-        include: '*'
-    jmx:
-      exposure:
-        include: health,info,env,beans
-loan:
-  overdue:
-    message: Email enviado!
+    endpoint:
+        health:
+            show-details: always
+        loggers:
+            enabled: true
+        web:
+            exposure:
+                include: '*'
+        jmx:
+            exposure:
+                include: health,info,env,beans
 logging:
-  file:
-    name: ./target/logs/${spring.application.name}/${spring.application.instance_id}.log
+    file:
+        name: ./target/logs/${spring.application.name}/${spring.application.instance_id}.log
 mail:
-  default-remetent: wallanpsantos.dev@yahoo.com
+    default-remetent: wallanpsantos.dev@yahoo.com
 

@@ -1,8 +1,8 @@
 package com.libraryapi.service;
 
 import com.libraryapi.api.model.entity.LoanModel;
+import com.libraryapi.enums.MessagesEnum;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,6 @@ public class ScheduleService {
     /* cron = " Second Minute Hour Day Month Year " */
     private static final String CRON_OVERDUE_LOANS = "0 0 0 1/1 * ?";
 
-    @Value("${loan.overdue.message}")
-    private String defaultMessage;
-
     private final LoanService loanService;
     private final EmailService emailService;
 
@@ -26,7 +23,7 @@ public class ScheduleService {
         var emails = loanService.getOverdueLoans().stream()
                 .map(LoanModel::getEmail)
                 .collect(Collectors.toList());
-        emailService.sendEmail(defaultMessage, emails);
+        emailService.sendEmail(MessagesEnum.EMAIL_ENVIADO.message, emails);
 
     }
 }

@@ -16,10 +16,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Value("${mail.default-remetent}")
     private String remetent;
-
-    @Value("${loan.overdue.message}")
-    private String defaultMessage;
-
+    
     private final JavaMailSender javaMailSender;
 
     @Override
