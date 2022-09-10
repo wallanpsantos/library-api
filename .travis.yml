@@ -1,22 +1,22 @@
-language: java
-
-dist: trusty
-
-before_install:
-  - chmod +x ./mvnw
-  - curl -s "https://get.sdkman.io" | bash
-  - source "$HOME/.sdkman/bin/sdkman-init.sh"
-  - sdk install java 11.0.14-zulu
-  - sdk use java 11.0.14-zulu
-
-before_script:
-  - chmod a+x ./mvnw
-
-install:
-  - mvn -N io.takari:maven:wrapper
-  - ./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
-cache:
-  directories:
-    - $HOME/.m2
-    - $HOME/.gradle
+#language: java
+#
+#dist: trusty
+#
+#before_install:
+#  - chmod +x ./mvnw
+#  - curl -s "https://get.sdkman.io" | bash
+#  - source "$HOME/.sdkman/bin/sdkman-init.sh"
+#  - sdk install java 11.0.14-zulu
+#  - sdk use java 11.0.14-zulu
+#
+#before_script:
+#  - chmod a+x ./mvnw
+#
+#install:
+#  - mvn -N io.takari:maven:wrapper
+#  - ./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+#
+#cache:
+#  directories:
+#    - $HOME/.m2
+#    - $HOME/.gradle
